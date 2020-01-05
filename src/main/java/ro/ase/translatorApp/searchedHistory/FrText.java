@@ -6,10 +6,11 @@ public class FrText extends SearchedText {
 
     public FrText(TipUser tipUser, String phrase) {
         super(tipUser, Language.FR, phrase);
+        create();
     }
 
     @Override
     void create() {
-//TODO
+        setPhrase("FR: " + getPhrase());
     }
 }

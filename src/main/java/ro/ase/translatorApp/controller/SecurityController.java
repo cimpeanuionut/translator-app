@@ -18,10 +18,11 @@ public class SecurityController {
     @ResponseBody
     public String currentUserName(Principal principal) {
         for(User user: userSingleton.getUsers()){
+            System.out.println(user.getUsername() + " " + principal.getName());
             if(user.getUsername().equals(principal.getName())){
                 userSingleton.setCurrentUser(user);
             }
         }
-        return principal.getName();
+        return userSingleton.getCurrentUser().getUsername();
     }
 }

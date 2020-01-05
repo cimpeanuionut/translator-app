@@ -8,8 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import ro.ase.translatorApp.userManagement.TipUser;
 import ro.ase.translatorApp.userManagement.User;
 import ro.ase.translatorApp.userManagement.UserDetails;
+import ro.ase.translatorApp.userManagement.UserSingleton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -31,10 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private List<User> createUsers() {
-        List<User> users = new ArrayList<>();
-        users.add(new UserDetails("guest","guest123", TipUser.USER));
-        users.add(new UserDetails("guest2","guest321",TipUser.USER));
-        users.add(new UserDetails("admin","admin123",TipUser.ADMIN));
-        return users;
+        UserSingleton userSingleton = UserSingleton.getInstance();
+        userSingleton.addUser(new UserDetails("guest","guest123", TipUser.USER));
+        userSingleton.addUser(new UserDetails("guest2","guest321",TipUser.USER));
+        userSingleton.addUser(new UserDetails("admin","admin123",TipUser.ADMIN));
+        return userSingleton.getUsers();
     }
 }
