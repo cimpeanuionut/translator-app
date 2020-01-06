@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import ro.ase.translatorApp.controllers.TranslateController.TranslateController;
+import ro.ase.translatorApp.controllers.TranslateController;
 
 import java.security.Principal;
 
