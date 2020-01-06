@@ -11,7 +11,8 @@ public class UserSearchedTextFactory {
             case DE: searchedText = new DeText(TipUser.USER, phrase); break;
             case EN: searchedText = new EnText(TipUser.USER, phrase); break;
             case FR: searchedText = new FrText(TipUser.USER, phrase); break;
-            case RO: searchedText = new RoText(TipUser.USER, phrase); break;
+            case ES: searchedText = new EsText(TipUser.USER, phrase); break;
+            case RU: searchedText = new RuText(TipUser.USER, phrase); break;
             default: break;
         }
         return searchedText;

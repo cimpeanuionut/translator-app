@@ -10,7 +10,8 @@ public class AdminSearchedTextFactory {
             case DE: searchedText = new DeText(TipUser.ADMIN, phrase); break;
             case EN: searchedText = new EnText(TipUser.ADMIN, phrase); break;
             case FR: searchedText = new FrText(TipUser.ADMIN, phrase); break;
-            case RO: searchedText = new RoText(TipUser.ADMIN, phrase); break;
+            case ES: searchedText = new EsText(TipUser.ADMIN, phrase); break;
+            case RU: searchedText = new RuText(TipUser.ADMIN, phrase); break;
             default: break;
         }
         return searchedText;

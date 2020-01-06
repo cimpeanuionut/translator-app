@@ -33,7 +33,8 @@ public class TranslateController {
         }
         if(inputLang != null && input != null &&
                 userSingleton.getCurrentUser().getUsername().equals(principal.getName()) &&
-                userSingleton.getCurrentUser() instanceof UserDetails){
+                userSingleton.getCurrentUser() instanceof UserDetails
+        && Language.contains(inputLang.toUpperCase())){
                 UserDetails userDetails = (UserDetails)userSingleton.getCurrentUser();
                 userDetails.addSearchText(SearchedTextFactory.createText(userDetails.getRol(), Language.valueOf(inputLang.toUpperCase()), input));
 

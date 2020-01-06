@@ -21,7 +21,7 @@ public class UserHistoryController {
        StringBuilder searchedText = new StringBuilder();
        if(userSingleton.getCurrentUser() != null && userSingleton.getCurrentUser() instanceof UserDetails){
            for(SearchedText text: ((UserDetails)userSingleton.getCurrentUser()).getIstoricCautari()){
-               if(text.getLanguage().equals(Language.valueOf(language.toUpperCase()))){
+               if(Language.contains(language.toUpperCase()) && text.getLanguage().equals(Language.valueOf(language.toUpperCase()))){
                    searchedText.append(text.getPhrase()).append("\n");
                }
            }
