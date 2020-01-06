@@ -2,6 +2,7 @@ package ro.ase.translatorApp;
 
 import org.springframework.web.client.RestTemplate;
 import ro.ase.translatorApp.abstractizations.IExternalServiceClient;
+import ro.ase.translatorApp.entities.Request;
 import ro.ase.translatorApp.entities.Response;
 
 import javax.net.ssl.SSLContext;
@@ -9,6 +10,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.UUID;
 
 public class ExternalServiceClient implements IExternalServiceClient {
 
@@ -16,12 +18,13 @@ public class ExternalServiceClient implements IExternalServiceClient {
     public String translate(String input, String inputLang, String outputLang) {
 
         final String REQUEST_KEY = "trnsl.1.1.20191212T202251Z.b915ec14d52b2f2f.4ea3f1588304c9340621af63f786e4e1d2c844dc";
-        final String REQUEST_URL = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + REQUEST_KEY + "&text=" + input + "&lang=" + inputLang + "-" + outputLang;
-        final String REQUEST_URL_MOCK = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + REQUEST_KEY + "&text=" + "input" + "&lang=" + "en" + "-" + "ru";
+
+        Request request = new Request.RequestBuilder(UUID.randomUUID(), REQUEST_KEY, input, inputLang, outputLang)
+                .setRequestInputFormat("text").setRequestOptions(true).build();
 
         trustSelfSignedSSL();
 
-        Response result = new RestTemplate().postForObject(REQUEST_URL_MOCK, input, Response.class);
+        Response result = new RestTemplate().postForObject(request.createUrl(), input, Response.class);
         return result.getText().toString();
     }
 
