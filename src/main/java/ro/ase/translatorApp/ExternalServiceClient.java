@@ -15,7 +15,7 @@ import java.util.UUID;
 public class ExternalServiceClient implements IExternalServiceClient {
 
     @Override
-    public void translate(String input, String inputLang, String outputLang) {
+    public String translate(String input, String inputLang, String outputLang) {
 
         final String REQUEST_KEY = "trnsl.1.1.20191212T202251Z.b915ec14d52b2f2f.4ea3f1588304c9340621af63f786e4e1d2c844dc";
 
@@ -25,6 +25,7 @@ public class ExternalServiceClient implements IExternalServiceClient {
         trustSelfSignedSSL();
 
         Response result = new RestTemplate().postForObject(request.createUrl(), input, Response.class);
+        return result.getText().get(0).toString();
     }
 
     public static void trustSelfSignedSSL() {

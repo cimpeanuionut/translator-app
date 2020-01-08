@@ -9,12 +9,16 @@ public class TranslatorManager implements ITranslatorManager {
     private static final IExternalServiceClient _externalServiceClient = new ExternalServiceClient();
 
     @Override
-    public void translate(String input, String inputLang, String outputLang) {
+    public String translate(String input, String inputLang, String outputLang) {
         Cache cache = new Cache();
-        cache.GetDataFromFile();
-
-        if(!cache.CacheTranslate(input, inputLang, outputLang))
-        _externalServiceClient.translate(input, inputLang, outputLang);
-        else return;
+        String outputWord = "";
+        if(cache.CacheTranslate(input, inputLang, outputLang).isEmpty()) {
+            outputWord = _externalServiceClient.translate(input, inputLang, outputLang);
+            cache.AddNewWordsToCache(input, inputLang, outputWord, outputLang);
+        }
+        else outputWord = cache.CacheTranslate(input, inputLang, outputLang);
+        //De mutat la inchidere in aplicatie
+        cache.SaveDataToCache();
+        return outputWord;
     }
 }
