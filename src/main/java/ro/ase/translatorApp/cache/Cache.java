@@ -39,7 +39,7 @@ public class Cache {
             int id = 0;
             String[] words;
             for (String item : list) {
-                words = item.split("\\-");
+                words = item.split("/");
                 switch (Language.valueOf(words[2].toUpperCase())) {
                     case EN:
                         enMap.put(id, new CacheTranslate(words[0], words[2] + '-' + words[3]));
