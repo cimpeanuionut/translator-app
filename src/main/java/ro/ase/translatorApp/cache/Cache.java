@@ -154,7 +154,7 @@ public class Cache {
     }
 
     public void AddNewWordsToCache(String inputWord, String inputLanguage, String outputWord, String outputLanguage) {
-        String newLine = inputWord.trim() + '-' + outputWord.trim() + '-' + inputLanguage.trim() + '-' + outputLanguage.trim();
+        String newLine = inputWord.trim() + '/' + outputWord.trim() + '/' + inputLanguage.trim() + '/' + outputLanguage.trim();
         list.add(newLine);
     }
 
