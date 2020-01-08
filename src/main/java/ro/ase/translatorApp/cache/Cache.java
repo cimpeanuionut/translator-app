@@ -16,12 +16,11 @@ public class Cache {
     private final String filePath = "src/main/java/ro/ase/translatorApp/cache/Cache";
     private ArrayList<String> list = null;
     private int listCount;
-    private Map<Integer, String> enMap = new HashMap<Integer, String>();
-    private Map<Integer, String> deMap = new HashMap<Integer, String>();
-    private Map<Integer, String> esMap = new HashMap<Integer, String>();
-    private Map<Integer, String> frMap = new HashMap<Integer, String>();
-    private Map<Integer, String> ruMap = new HashMap<Integer, String>();
-
+    private Map<Integer, CacheTranslate> enMap = new HashMap<Integer, CacheTranslate>();
+    private Map<Integer, CacheTranslate> deMap = new HashMap<Integer, CacheTranslate>();
+    private Map<Integer, CacheTranslate> esMap = new HashMap<Integer, CacheTranslate>();
+    private Map<Integer, CacheTranslate> frMap = new HashMap<Integer, CacheTranslate>();
+    private Map<Integer, CacheTranslate> ruMap = new HashMap<Integer, CacheTranslate>();
     private void GetDataFromFile() {
         Scanner s = null;
         try {
@@ -43,36 +42,36 @@ public class Cache {
                 words = item.split("\\-");
                 switch (Language.valueOf(words[2].toUpperCase())) {
                     case EN:
-                        enMap.put(id, words[0]);
+                        enMap.put(id, new CacheTranslate(words[0], words[2] + '-' + words[3]));
                         break;
                     case DE:
-                        deMap.put(id, words[0]);
+                        deMap.put(id, new CacheTranslate(words[0],words[2] + '-' + words[3]));
                         break;
                     case ES:
-                        esMap.put(id, words[0]);
+                        esMap.put(id, new CacheTranslate(words[0],words[2] + '-' + words[3]));
                         break;
                     case FR:
-                        frMap.put(id, words[0]);
+                        frMap.put(id, new CacheTranslate(words[0], words[2] + '-' + words[3]));
                         break;
                     case RU:
-                        ruMap.put(id, words[0]);
+                        ruMap.put(id, new CacheTranslate(words[0], words[2] + '-' + words[3]));
                         break;
                 }
                 switch (Language.valueOf(words[3].toUpperCase())) {
                     case EN:
-                        enMap.put(id, words[1]);
+                        enMap.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
                         break;
                     case DE:
-                        deMap.put(id, words[1]);
+                        deMap.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
                         break;
                     case ES:
-                        esMap.put(id, words[1]);
+                        esMap.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
                         break;
                     case FR:
-                        frMap.put(id, words[1]);
+                        frMap.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
                         break;
                     case RU:
-                        ruMap.put(id, words[1]);
+                        ruMap.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
                         break;
                 }
                 id++;
@@ -85,30 +84,36 @@ public class Cache {
             GetDataFromFile();
 
         int id = -1;
+        String s = languageEntry.toUpperCase() + '-' + languageExit.toUpperCase();
         switch (Language.valueOf(languageEntry.toUpperCase())) {
             case EN:
-                for (Map.Entry<Integer, String> entry : enMap.entrySet())
-                    if (entry.getValue().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()))
+                for (Map.Entry<Integer, CacheTranslate> entry : enMap.entrySet())
+                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
                         id = entry.getKey();
                 break;
             case DE:
-                for (Map.Entry<Integer, String> entry : deMap.entrySet())
-                    if (entry.getValue().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()))
+                for (Map.Entry<Integer, CacheTranslate> entry : deMap.entrySet())
+                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
                         id = entry.getKey();
                 break;
             case ES:
-                for (Map.Entry<Integer, String> entry : esMap.entrySet())
-                    if (entry.getValue().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()))
+                for (Map.Entry<Integer, CacheTranslate> entry : esMap.entrySet())
+                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
                         id = entry.getKey();
                 break;
             case FR:
-                for (Map.Entry<Integer, String> entry : frMap.entrySet())
-                    if (entry.getValue().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()))
+                for (Map.Entry<Integer, CacheTranslate> entry : frMap.entrySet())
+                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
                         id = entry.getKey();
                 break;
             case RU:
-                for (Map.Entry<Integer, String> entry : ruMap.entrySet())
-                    if (entry.getValue().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()))
+                for (Map.Entry<Integer, CacheTranslate> entry : ruMap.entrySet())
+                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
                         id = entry.getKey();
                 break;
             default:
@@ -117,34 +122,30 @@ public class Cache {
 
         switch (Language.valueOf(languageExit.toUpperCase())) {
             case EN:
-                for (Map.Entry<Integer, String> entry : enMap.entrySet())
-                    if (entry.getKey().equals(id)) {
-                        return entry.getValue();
-                    }
+                for (Map.Entry<Integer, CacheTranslate> entry : enMap.entrySet())
+                    if (entry.getKey().equals(id))
+                        return entry.getValue().GetWord();
+
                 break;
             case DE:
-                for (Map.Entry<Integer, String> entry : deMap.entrySet())
-                    if (entry.getKey().equals(id)) {
-                        return entry.getValue();
-                    }
+                for (Map.Entry<Integer, CacheTranslate> entry : deMap.entrySet())
+                    if (entry.getKey().equals(id))
+                        return entry.getValue().GetWord();
                 break;
             case ES:
-                for (Map.Entry<Integer, String> entry : esMap.entrySet())
-                    if (entry.getKey().equals(id)) {
-                        return entry.getValue();
-                    }
+                for (Map.Entry<Integer, CacheTranslate> entry : esMap.entrySet())
+                    if (entry.getKey().equals(id))
+                        return entry.getValue().GetWord();
                 break;
             case FR:
-                for (Map.Entry<Integer, String> entry : frMap.entrySet())
-                    if (entry.getKey().equals(id)) {
-                        return entry.getValue();
-                    }
+                for (Map.Entry<Integer, CacheTranslate> entry : frMap.entrySet())
+                    if (entry.getKey().equals(id))
+                        return entry.getValue().GetWord();
                 break;
             case RU:
-                for (Map.Entry<Integer, String> entry : ruMap.entrySet())
-                    if (entry.getKey().equals(id)) {
-                        return entry.getValue();
-                    }
+                for (Map.Entry<Integer, CacheTranslate> entry : ruMap.entrySet())
+                    if (entry.getKey().equals(id))
+                        return entry.getValue().GetWord();
                 break;
             default:
                 return "";
