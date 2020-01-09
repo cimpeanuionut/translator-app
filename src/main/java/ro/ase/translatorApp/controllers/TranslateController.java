@@ -3,6 +3,7 @@ package ro.ase.translatorApp.controllers;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ro.ase.translatorApp.TranslatorManager;
 import ro.ase.translatorApp.abstractizations.ITranslatorManager;
@@ -20,8 +21,8 @@ public class TranslateController {
 
     private static final ITranslatorManager _translatorManager = new TranslatorManager();
 
-    @RequestMapping(value = "/api/translate", method = RequestMethod.GET)
-    public void getTranslation(String input, String inputLang, String outputLang, Principal principal)
+    @RequestMapping(value = "/translate", method = RequestMethod.GET)
+    public String getTranslation(@RequestParam(value = "inputText") String input, @RequestParam(value = "inputFirstLanguage") String inputLang, @RequestParam(value = "inputSecondLanguage") String outputLang, Principal principal)
     {
         UserSingleton userSingleton = UserSingleton.getInstance();
         if(userSingleton.getCurrentUser() == null){
@@ -40,5 +41,6 @@ public class TranslateController {
 
         }
         _translatorManager.translate(input, inputLang, outputLang);
+        return "home";
     }
 }

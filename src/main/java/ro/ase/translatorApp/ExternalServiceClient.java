@@ -19,12 +19,13 @@ public class ExternalServiceClient implements IExternalServiceClient {
 
         final String REQUEST_KEY = "trnsl.1.1.20191212T202251Z.b915ec14d52b2f2f.4ea3f1588304c9340621af63f786e4e1d2c844dc";
 
-        Request request = new Request.RequestBuilder(UUID.randomUUID(), REQUEST_KEY, input, inputLang, outputLang)
-                .setRequestInputFormat("text").setRequestOptions(true).build();
+        Request request = new Request.RequestBuilder(UUID.randomUUID(), REQUEST_KEY, input, inputLang.toLowerCase(), outputLang.toLowerCase())
+                .setRequestInputFormat("text").setRequestOptions(false).build();
 
         trustSelfSignedSSL();
+        String url = request.createUrl();
 
-        Response result = new RestTemplate().postForObject(request.createUrl(), input, Response.class);
+        Response result = new RestTemplate().postForObject(url, null, Response.class);
         return result.getText().get(0).toString();
     }
 

@@ -4,24 +4,24 @@ import java.util.ArrayList;
 
 public class Response {
 
-    private String code;
+    private Integer code;
     private String lang;
     private ArrayList<String> text;
 
     public Response() {
     }
 
-    public Response(String code, String lang, ArrayList<String> text) {
+    public Response(Integer code, String lang, ArrayList<String> text) {
         this.code = code;
         this.lang = lang;
         this.text = text;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
