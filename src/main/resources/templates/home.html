@@ -30,7 +30,7 @@
     <form action="http://localhost:8080/translate" method="get">
         <div class="form-group">
             <label>Insert a word:</label>
-            <input type="text" class="form-control" id="inputText"  placeholder="Enter a word" name="inputText" th:required="required" th:autofocus="autofocus"><br/>
+            <input type="text" class="form-control" id="inputText"  placeholder="Enter a word" name="inputText" th:value="${inputText}" th:required="required" th:autofocus="autofocus"><br/>
             <label>Input Language:</label>
             <select id="inputFirstLanguage" name="inputFirstLanguage">
                 <option th:value="'EN'" th:text="English"></option>
@@ -41,7 +41,7 @@
             </select>
         </div>
         <div class="form-group">
-<!--            <input type="text" class="form-control" id="outputText" name="outputText"><br/>-->
+            <input type="text" class="form-control" id="outputText" name="outputText" th:value="${outputText}"><br/>
             <label>Output Language:</label>
             <select id="inputSecondLanguage" name="inputSecondLanguage">
                 <option th:value="'EN'" th:text="English"></option>
