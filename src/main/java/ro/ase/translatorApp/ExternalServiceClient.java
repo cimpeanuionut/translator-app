@@ -25,7 +25,7 @@ public class ExternalServiceClient implements IExternalServiceClient {
         trustSelfSignedSSL();
 
         Response result = new RestTemplate().postForObject(request.createUrl(), input, Response.class);
-        return result.getText().toString();
+        return result.getText().get(0).toString();
     }
 
     public static void trustSelfSignedSSL() {

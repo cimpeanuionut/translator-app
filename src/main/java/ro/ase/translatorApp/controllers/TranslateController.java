@@ -21,7 +21,7 @@ public class TranslateController {
     private static final ITranslatorManager _translatorManager = new TranslatorManager();
 
     @RequestMapping(value = "/api/translate", method = RequestMethod.GET)
-    public String getTranslation(String input, String inputLang, String outputLang, Principal principal)
+    public void getTranslation(String input, String inputLang, String outputLang, Principal principal)
     {
         UserSingleton userSingleton = UserSingleton.getInstance();
         if(userSingleton.getCurrentUser() == null){
@@ -39,6 +39,6 @@ public class TranslateController {
                 userDetails.addSearchText(SearchedTextFactory.createText(userDetails.getRol(), Language.valueOf(inputLang.toUpperCase()), input));
 
         }
-        return _translatorManager.translate(input, inputLang, outputLang);
+        _translatorManager.translate(input, inputLang, outputLang);
     }
 }
