@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import ro.ase.translatorApp.TranslatorManager;
 import ro.ase.translatorApp.abstractizations.ITranslatorManager;
 import ro.ase.translatorApp.searchedHistory.Language;
@@ -22,7 +23,7 @@ public class TranslateController {
     private static final ITranslatorManager _translatorManager = new TranslatorManager();
 
     @RequestMapping(value = "/translate", method = RequestMethod.GET)
-    public String getTranslation(@RequestParam(value = "inputText") String input, @RequestParam(value = "inputFirstLanguage") String inputLang, @RequestParam(value = "inputSecondLanguage") String outputLang, Principal principal)
+    public ModelAndView getTranslation(@RequestParam(value = "inputText") String input, @RequestParam(value = "inputFirstLanguage") String inputLang, @RequestParam(value = "inputSecondLanguage") String outputLang, Principal principal)
     {
         UserSingleton userSingleton = UserSingleton.getInstance();
         if(userSingleton.getCurrentUser() == null){
@@ -38,9 +39,12 @@ public class TranslateController {
         && Language.contains(inputLang.toUpperCase())){
                 UserDetails userDetails = (UserDetails)userSingleton.getCurrentUser();
                 userDetails.addSearchText(SearchedTextFactory.createText(userDetails.getRol(), Language.valueOf(inputLang.toUpperCase()), input));
-
         }
-        _translatorManager.translate(input, inputLang, outputLang);
-        return "home";
+        ModelAndView mav = new ModelAndView("home");
+        String result = _translatorManager.translate(input, inputLang, outputLang);
+        mav.addObject("outputText", result);
+        mav.addObject("inputText", input);
+        mav.addObject("inputSecondLanguage", outputLang);
+       return mav;
     }
 }
