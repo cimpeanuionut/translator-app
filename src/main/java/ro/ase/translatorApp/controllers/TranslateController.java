@@ -1,5 +1,4 @@
 package ro.ase.translatorApp.controllers;
-
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,13 +32,17 @@ public class TranslateController {
                 }
             }
         }
-        if(inputLang != null && input != null &&
+        if(inputLang == null && input != null &&
                 userSingleton.getCurrentUser().getUsername().equals(principal.getName()) &&
-                userSingleton.getCurrentUser() instanceof UserDetails
-        && Language.contains(inputLang.toUpperCase())){
-                UserDetails userDetails = (UserDetails)userSingleton.getCurrentUser();
-                userDetails.addSearchText(SearchedTextFactory.createText(userDetails.getRol(), Language.valueOf(inputLang.toUpperCase()), input));
+                userSingleton.getCurrentUser() instanceof UserDetails) {
+        	UserDetails userDetails = (UserDetails)userSingleton.getCurrentUser();
+	        if(Language.contains(inputLang.toUpperCase()).isNull()){
+	                userDetails.addSearchText(SearchedTextFactory.createText(userDetails.getRol(), Language.valueOf(inputLang.toUpperCase()) , input));
+	        } else {
+	        	userDetails.addSearchText(SearchedTextFactory.createText(userDetails.getRol(), null , input));
+	        }
         }
+        
         ModelAndView mav = new ModelAndView("home");
         String result = _translatorManager.translate(input, inputLang, outputLang);
         mav.addObject("outputText", result);
