@@ -21,6 +21,7 @@ public class Cache {
     private Map<Integer, CacheTranslate> esMap = new HashMap<Integer, CacheTranslate>();
     private Map<Integer, CacheTranslate> frMap = new HashMap<Integer, CacheTranslate>();
     private Map<Integer, CacheTranslate> ruMap = new HashMap<Integer, CacheTranslate>();
+    private Map<Integer, CacheTranslate> other = new HashMap<Integer, CacheTranslate>();
     private void GetDataFromFile() {
         Scanner s = null;
         try {
@@ -40,7 +41,10 @@ public class Cache {
             String[] words;
             for (String item : list) {
                 words = item.split("/");
-                switch (Language.valueOf(words[2].toUpperCase())) {
+                if(Language.contains(words[2].toUpperCase()).limba() == null) {
+                	other.put(id, new CacheTranslate(words[0], words[2] + '-' + words[3]));
+                }else {
+                	switch (Language.contains(words[2].toUpperCase()).limba()) {
                     case EN:
                         enMap.put(id, new CacheTranslate(words[0], words[2] + '-' + words[3]));
                         break;
@@ -56,8 +60,14 @@ public class Cache {
                     case RU:
                         ruMap.put(id, new CacheTranslate(words[0], words[2] + '-' + words[3]));
                         break;
+                    default: other.put(id, new CacheTranslate(words[0], words[2] + '-' + words[3]));
+                    break;
                 }
-                switch (Language.valueOf(words[3].toUpperCase())) {
+                }
+                if(Language.contains(words[2].toUpperCase()).limba() == null) {
+                	other.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
+                }else {
+                	switch (Language.contains(words[3].toUpperCase()).limba()) {
                     case EN:
                         enMap.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
                         break;
@@ -73,7 +83,12 @@ public class Cache {
                     case RU:
                         ruMap.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
                         break;
+                    default:
+                        other.put(id, new CacheTranslate(words[1],words[2] + '-' + words[3]));
+                        break;
                 }
+                }
+                
                 id++;
             }
         }
@@ -85,50 +100,62 @@ public class Cache {
 
         int id = -1;
         String s = languageEntry.toUpperCase() + '-' + languageExit.toUpperCase();
-        switch (Language.valueOf(languageEntry.toUpperCase())) {
+        if(Language.contains(languageEntry).limba() == null ) {
+        	for (Map.Entry<Integer, CacheTranslate> entry : other.entrySet())
+                id = entry.getKey();
+        } else {
+	        	switch (Language.contains(languageEntry).limba()) {
+	            case EN:
+	                for (Map.Entry<Integer, CacheTranslate> entry : enMap.entrySet())
+	                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+	                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
+	                        id = entry.getKey();
+	                break;
+	            case DE:
+	                for (Map.Entry<Integer, CacheTranslate> entry : deMap.entrySet())
+	                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+	                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
+	                        id = entry.getKey();
+	                break;
+	            case ES:
+	                for (Map.Entry<Integer, CacheTranslate> entry : esMap.entrySet())
+	                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+	                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
+	                        id = entry.getKey();
+	                break;
+	            case FR:
+	                for (Map.Entry<Integer, CacheTranslate> entry : frMap.entrySet())
+	                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+	                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
+	                        id = entry.getKey();
+	                break;
+	            case RU:
+	                for (Map.Entry<Integer, CacheTranslate> entry : ruMap.entrySet())
+	                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
+	                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
+	                        id = entry.getKey();
+	                break;
+	            default:
+	            	for (Map.Entry<Integer, CacheTranslate> entry : other.entrySet())
+	                        id = entry.getKey();
+	                break;
+	        }
+        }
+        
+        if(Language.contains(languageEntry).limba() == null ) {
+        	for (Map.Entry<Integer, CacheTranslate> entry : other.entrySet())
+                
+                return entry.getValue().GetWord();
+        } else {
+        switch (Language.contains(languageEntry).limba()) {
             case EN:
                 for (Map.Entry<Integer, CacheTranslate> entry : enMap.entrySet())
-                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
-                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
-                        id = entry.getKey();
+                    if (entry.getKey().equals(id))
+                        return entry.getValue().GetWord();
+
                 break;
             case DE:
                 for (Map.Entry<Integer, CacheTranslate> entry : deMap.entrySet())
-                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
-                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
-                        id = entry.getKey();
-                break;
-            case ES:
-                for (Map.Entry<Integer, CacheTranslate> entry : esMap.entrySet())
-                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
-                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
-                        id = entry.getKey();
-                break;
-            case FR:
-                for (Map.Entry<Integer, CacheTranslate> entry : frMap.entrySet())
-                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
-                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
-                        id = entry.getKey();
-                break;
-            case RU:
-                for (Map.Entry<Integer, CacheTranslate> entry : ruMap.entrySet())
-                    if (entry.getValue().GetWord().toUpperCase().equalsIgnoreCase(word.toUpperCase().trim()) &&
-                            entry.getValue().GetFlag().toUpperCase().equalsIgnoreCase(s))
-                        id = entry.getKey();
-                break;
-            default:
-                return "";
-        }
-
-        switch (Language.valueOf(languageExit.toUpperCase())) {
-            case EN:
-                for (Map.Entry<Integer, CacheTranslate> entry : enMap.entrySet())
-                    if (entry.getKey().equals(id))
-                        return entry.getValue().GetWord();
-
-                break;
-            case DE:
-                for (Map.Entry<Integer, CacheTranslate> entry : deMap.entrySet())
                     if (entry.getKey().equals(id))
                         return entry.getValue().GetWord();
                 break;
@@ -148,8 +175,13 @@ public class Cache {
                         return entry.getValue().GetWord();
                 break;
             default:
-                return "";
+            	for (Map.Entry<Integer, CacheTranslate> entry : other.entrySet())
+              
+                        return entry.getValue().GetWord();
+                break;
         }
+        
+    }
         return "";
     }
 
